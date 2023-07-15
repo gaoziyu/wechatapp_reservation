@@ -1,0 +1,22 @@
+<!--index.wxml-->
+<view class="container">
+
+  <swiper class="swiperBox">
+    <swiper-item>
+      <image src="cloud://myenv-4g5fwgk2a1952600.6d79-myenv-4g5fwgk2a1952600-1318166892/logo.jpg" class="swiperImg"  mode="widthFix" ></image>
+    </swiper-item>
+  </swiper>
+
+
+  <!-- 桌子展示 -->
+  <view class="reservations">
+    <view wx:for="{{tablelist}}" class="imgbox">
+      <image class="img" src="{{item.pro_pic}}" mode="widthFix"></image>
+      <view class="imgText">
+        {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  
+</view>

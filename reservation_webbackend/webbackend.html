@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<script src="https://web-9gikcbug35bad3a8-1304825656.tcloudbaseapp.com/sdk/1.3.0/cloud.js"></script> 
+<body>
+    <div id="app">
+        <button @click="getData">{{message}}</button>
+    </div>
+</body>
+
+<!-- <script src="./webbakcend.js"></script> -->
+<script>
+  const { createApp } = Vue
+  const c = window.cloud
+  Vue.prototype.cloud = c
+  new Vue = createApp({
+    data() {
+      return {
+        message: 'Hello Vue!'
+      }
+    },
+    methods: {
+        test(){
+            
+        },
+        // 获取数据
+        async getData() {
+            // 声明新的 cloud 实例
+            var c1 = new this.cloud.Cloud({
+            // 必填，表示是未登录模式
+            identityless: true,
+            // 资源方 AppID 填自己的
+            resourceAppid: 'wxb50f2310bf694ac4',
+            // 资源方环境 ID	填自己的
+            resourceEnv: 'myenv-4g5fwgk2a1952600',
+            })
+            //初始化
+            await c1.init()
+            //初始化执行完再调用
+    
+            // 完成后正常使用资源方的已授权的云资源
+            c1.callFunction({
+            name: 'getUser',             //调用的云函数名字
+            success: res => {
+                console.log(res)
+            }
+            })
+        },
+  
+    }
+  }).mount('#app')
+</script>

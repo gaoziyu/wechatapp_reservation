@@ -1,0 +1,23 @@
+/* pages/myRes/myRes.wxss */
+
+.labelCard {
+  margin: 20rpx;
+  background-color: white;
+  padding: 20rpx;
+  border-radius: 40rpx;
+  box-shadow: 2rpx 2rpx 10rpx 5rpx #b1adb4;
+  position: relative;
+}
+
+.newTag {
+  /* 定位 */
+  position: absolute;
+  right: 30rpx;
+  left: auto;
+  top: 20rpx;
+
+  color: white;
+  background-color: rgba(230, 82, 82, 0.815);
+  font-size:x-small;
+  border-radius: 10rpx;
+}

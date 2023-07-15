@@ -1,0 +1,231 @@
+/* pages/reservation/reservation.wxss */
+
+
+.container{
+  padding: 0rpx;
+}
+
+.form{
+  margin-top: 20rpx;
+  background-color: #ffffff;
+  width: 90%;
+  border-radius: 20rpx;
+  box-shadow: 1rpx 1rpx 5rpx 3rpx #a1a1a1;
+  
+}
+
+.address{
+  padding: 15rpx;
+  padding-bottom: 0rpx;
+  margin-left: 20rpx;
+  /* height: 100rpx; */
+}
+.address_content{
+  padding: 15rpx;
+  font-size: small;
+  color: #6c6c6c;
+  margin-left: 15rpx;
+  margin-bottom: 15rpx;
+}
+
+.items{
+  padding: 10rpx;
+  display: flex;
+  flex-direction: row;
+  /* justify-content:space-around; */
+  width: 97%;
+  flex-wrap: wrap;
+}
+.item{
+  flex: 1;
+  /* height: 120px; */
+  margin: 0 10rpx 10rpx 0;
+  /* 这里的20rpx = (分布个数4-1)*间隙10rpx, 可以根据实际的分布个数和间隙区调整 */
+  width: calc((100% - 20rpx) / 3);
+  min-width: calc((100% - 20rpx) / 3);
+  max-width: calc((100% - 20rpx) / 3);
+
+  height: 70rpx;
+  /* width: 24%; */
+  border-radius: 8rpx;
+  text-align: center;
+  line-height: 70rpx;
+  font-size: small;
+}
+.item:nth-child(3n) { 
+  margin-right: 0;
+}
+
+.peopleNumList{
+  padding: 10rpx;
+  display: flex;
+  flex-direction: row;
+  /* justify-content:space-around; */
+  width: 97%;
+  flex-wrap: wrap;
+}
+
+.num{
+  flex: 1;
+  /* height: 120px; */
+  margin: 0 10rpx 10rpx 0;
+  /* 这里的20rpx = (分布个数4-1)*间隙10rpx, 可以根据实际的分布个数和间隙区调整 */
+  width: calc((100% - 30rpx) / 4);
+  min-width: calc((100% - 30rpx) / 4);
+  max-width: calc((100% - 30rpx) / 4);
+
+
+  height: 70rpx;
+  /* width: 24%; */
+  border-radius: 8rpx;
+  text-align: center;
+  line-height: 70rpx;
+  font-size: small;
+}
+.num:nth-child(4n) { 
+  margin-right: 0;
+}
+
+
+.unActive{
+  background-color: #f2f2f2;
+}
+.active{
+  background-color: #549f8a;
+}
+
+.calendarArea{
+  padding: 15rpx;
+  display: flex;
+  flex-direction: row;
+}
+.calendarText{
+  color: #9ba1c3;
+}
+.calendar{
+  /* background-color: #f2f2f2; */
+  /* height: 100rpx; */
+  width: 24%;
+  border-radius: 8rpx;
+  text-align: center;
+  /* line-height: 100rpx; */
+  
+  margin: 3rpx;
+}
+.day{
+  height: 50%;
+  line-height: 50%x;
+  margin: 4rpx;
+}
+.date{
+  font-size:medium;
+}
+.weekday{
+  font-size:xx-small;
+}
+
+.timeArea{
+  background-color: #e7e7e7;
+  margin: 0rpx 20rpx 0rpx 20rpx;
+  border-radius: 10rpx;
+  /* width: 97%; */
+  flex-wrap: wrap;
+  padding: 15rpx;
+  padding-bottom: 0rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* justify-content:space-around; */
+}
+.time{
+  flex: 1;
+  /* height: 120px; */
+  margin: 0 20rpx 20rpx 0;
+  /* 这里的20rpx = (分布个数5-1)*间隙5rpx, 可以根据实际的分布个数和间隙区调整 */
+  width: calc((100% - 80rpx) / 5);
+  min-width: calc((100% - 80rpx) / 5);
+  max-width: calc((100% - 80rpx) / 5);
+
+
+  border-radius: 10rpx;
+  height: 80rpx;
+  text-align: center;
+  line-height: 80rpx;
+  font-size: small;
+}
+.time:nth-child(5n) { 
+  margin-right: 0;
+}
+.selectable{
+  color: black;
+  background-color: #ffffff;
+}
+.unSelectable{
+  color: white;
+  background-color: #d2d6e1;
+}
+.selected{
+  color: white;
+  background-color: #c2d8ae;
+}
+.alreadyFull {
+  color: white;
+  background-color: #ff7171;
+}
+
+.timeActive{
+  background-color: #549f8a;
+}
+
+.reservedUsersList{
+  padding-left: 40rpx;
+  line-height: 50rpx;
+  font-size: small;
+  margin-bottom: 20rpx;
+  
+}
+.nobody{
+  font-size: x-small;
+  color: #cad5e5;
+}
+
+.contiune{
+  font-size:xx-small;
+  margin-left: 30rpx;
+  margin-bottom:10rpx;
+  color: #c85d5a;
+}
+
+.contact{
+  padding: 15rpx;
+  /* height: 260rpx; */
+}
+
+.notestext{
+  font-size: xx-small;
+  color: #969696c0;
+}
+.notes{
+  margin: 10rpx;
+  width: 95%;
+  height: 150rpx;
+  padding: 10rpx;
+  /* border: 5rpx solid black; */
+  background-color: rgba(207, 207, 207, 0.432);
+  border-radius: 20rpx;
+}
+
+.button{
+  margin-top: 20rpx;
+  width: 90%;
+}
+
+
+.unLogin{
+  margin-top: 50%;
+  color: #9ba4b8;
+}
+.img{
+  width: 200rpx;
+}
+
