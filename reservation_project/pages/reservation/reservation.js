@@ -158,6 +158,7 @@ Page({
     let that = this
     let reservedTime = []
     let timelist = this.data.timelist
+    let now = new Date().toTimeString().substring(0, 2)
     // console.log("timelist:", timelist)
     wx.cloud.callFunction({
       name: "getReservedTime",
@@ -192,9 +193,16 @@ Page({
 
           // 判断是否满足人数要求，更新时间列表状态
           for (let i = 0; i < timelist.length; i++) {
-            if (timelist[i].res_number + that.data.res_number > 4) {
-              timelist[i].status = 1
+            
+            let t = timelist[i].time.substring(0, 2)
+            if (now - t >= 0 && that.data.dateIsActive == 0) {
+              timelist[i].status = 2
+            }else{
+              if (timelist[i].res_number + that.data.res_number > 4) {
+                timelist[i].status = 1
+              }
             }
+            
           }
       
         }
@@ -611,6 +619,7 @@ Page({
           telephoneNum: '',
           notes: ''
         })
+        this.getReservedUser()
       }).catch(err => {
         console.log('添加失败', err)//失败提示错误信息
       })
