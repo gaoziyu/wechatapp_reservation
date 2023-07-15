@@ -1,0 +1,47 @@
+<view class="info">
+  <view class="head">
+    <open-data type="userAvatarUrl"></open-data>
+  </view>
+  <view>
+    {{userInfo.username}}
+  </view>
+</view>
+
+
+<view wx:if="{{isLogin}}" class="menu">
+  <!-- 我的预约 -->
+  <view class="menuStyle" bindtap="myRes">
+    <view class="line">
+      我的预约
+    </view>
+    <van-icon name="arrow" class="line" />
+  </view>
+
+  <!-- 个人信息 -->
+  <view class="menuStyle" bindtap="info">
+    <view class="line">
+      个人信息
+    </view>
+    <van-icon name="arrow" class="line" />
+  </view>
+
+  <!-- 关于 -->
+  <view class="menuStyle">
+    <view class="line">
+      关于我们
+    </view>
+    <van-icon name="arrow" class="line" />
+  </view>
+
+  <!-- 退出登录 -->
+  <view>
+    <button class="loginButton logout" bindtap="logout">退 出 登 录</button>
+  </view>
+</view>
+
+<view wx:else>
+  <view>
+    <button class="loginButton login" bindtap="login">登 录</button>
+  </view>
+
+</view>

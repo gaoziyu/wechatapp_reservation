@@ -1,0 +1,125 @@
+<!-- 登录显示 -->
+<view wx:if="{{isLogin}}" class="container">
+  <!-- 地址区域 -->
+  <view class="form">
+    <view class="address">
+      {{address.address_name}}
+    </view>
+    <view class="address_content">
+      {{address.address}}
+    </view>
+  </view>
+
+  <!-- 项目选项区域 -->
+  <view class="form">
+    <view style="padding: 15rpx;">
+      选择预约项目
+    </view>
+    <!-- 循环生成预约项目选择按钮 -->
+    <view class="items">
+      <view class="item {{itemIsActive == index ? 'active' : 'unActive'}}" wx:for="{{itemList}}" wx:key="{{item.pro_id}}" data-id="{{item.pro_id}}" bindtap="selectItems">{{item.name}}</view>
+    </view>
+  </view>
+
+ <!-- 人数选择 -->
+  <view class="form">
+    <view style="padding: 15rpx;">
+      选择人数
+    </view>
+    <!-- 循环生成预约人数选择按钮 -->
+    <view class="peopleNumList">
+      <view class="num {{numIsActive == index ? 'active' : 'unActive'}}" wx:for="{{peoNum}}" wx:key="index" data-index="{{index}}" bindtap="selectNum">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 时间选区 -->
+  <!-- 上一步选择后显示 -->
+  <view class="form">
+    <view style="padding: 15rpx;">
+      选择时间
+    </view>
+    <!-- 日历区域，上一步选择后显示 -->
+    <view wx:if="{{itemIsActive != -1 && numIsActive != -1}}" class="calendarArea">
+      <view class="calendar {{dateIsActive == index ? 'active' : 'unActive'}}" wx:for="{{dates}}" wx:key="index" data-index="{{index}}" bindtap="selectDates">
+        <!-- 日期 -->
+        <view class="day date">
+          {{item.date}}
+        </view>
+        <view class="day weekday">
+          {{item.weekday}}
+        </view>
+      </view>
+        
+    </view>
+    <!-- 日历区域，上一步未选择区域 -->
+    <view wx:else class="calendarArea calendarText">
+      请先选择项目
+    </view>
+
+    <!-- 时间区域 -->
+    <view wx:if="{{itemIsActive != -1 && numIsActive != -1 && dateIsActive!= -1}}" class="timeArea">
+      <!-- 状态码status：0-可选，1-已被选，2-不可选，3-已满 -->
+      <view wx:for="{{timelist}}" wx:key="index" bindtap="selectTime" data-status="{{item.status}}" data-index="{{index}}" data-time="{{item.time}}" class="time {{item.status == 0 ? 'selectable' : ( item.status == 1 ? 'selected' : ( item.status == 2 ? 'unSelectable' : 'alreadyFull') )}} {{item.timeIsSelect ? 'timeActive' : ''}}">
+        {{item.time}}
+      </view>
+    </view>
+
+    <!-- 时间选择不连续 -->
+    <view wx:if="{{isTimeContinuous}}" class="contiune">时间选择不连续</view>
+    <view wx:if="{{!isTimeContinuous}}" class="contiune">
+      <text class="info-name" decode="true">&ensp;</text>
+    </view>
+  </view>
+
+  <!-- 该时间段已预约人列表 -->
+  <view class="form" >
+    <view style="padding: 15rpx;">
+      该时间段已预约用户
+    </view>
+    <view class="reservedUsersList"  wx:if="{{userList.length != 0}}">
+      <view wx:for="{{userList}}">
+        {{item}}
+      </view>
+    </view>
+    <view class="reservedUsersList nobody" wx:else="">
+      <view>暂时无人预约哦~</view>
+    </view>
+  </view>
+
+  <!-- 联系人与联系方式 -->
+  <view class="form">
+    <view class="contact">
+      <view>联系方式</view>
+      <!-- 联系方式填写 -->
+      <view>
+        <van-cell-group>
+          <van-field model:value="{{ playerName }}" placeholder="联系人" border="{{ false }}" bind:change="playerName" />
+          <van-field maxlength="11" model:value="{{ telephoneNum }}" placeholder="联系方式" border="{{ false }}" bind:change="telephoneNum" />
+        </van-cell-group>
+      </view>
+      <view>备注<text class="notestext"> (可选)</text></view>
+      <view>
+        <textarea model:value="{{notes}}" placeholder="在此输入..." class="notes" name="remark" />
+      </view>
+      
+    </view>
+
+  </view>
+
+
+
+  <!-- 提交按钮 -->
+  <van-button class="button" type="primary" size="large" round bind:click="submit">立即预约</van-button>
+
+</view>
+
+
+<!-- 未登录显示 -->
+<view wx:else class="container unLogin">
+  <view>
+    <image class="img" src="../../img/cat.png" mode="widthFix"></image>
+  </view>
+  <view>
+    请登录后预约
+  </view>
+</view>

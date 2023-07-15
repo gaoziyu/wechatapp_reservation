@@ -1,0 +1,52 @@
+{
+
+  "pages":[
+    "pages/index/index",
+    "pages/reservation/reservation",
+    "pages/home/home"
+  ],
+
+  "subpackages": [{
+    "root": "home",
+    "pages": [
+      "myRes/myRes",
+      "info/info"
+    ]
+  }],
+
+  
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#5a8a7e",
+    "navigationBarTitleText": "用于测试的预约项目",
+    "navigationBarTextStyle":"white",
+    "enablePullDownRefresh": false,
+    "backgroundColor": "#efefef"
+  },
+
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "主页",
+      "iconPath": "./img/home.png",
+      "selectedIconPath": "./img/home-act.png"
+    },
+    {
+      "pagePath": "pages/reservation/reservation",
+      "text": "预约",
+      "iconPath": "./img/chart-pie.png",
+      "selectedIconPath": "./img/chart-pie-act.png"
+    },
+    {
+      "pagePath": "pages/home/home",
+      "text": "我的",
+      "iconPath": "./img/user.png",
+      "selectedIconPath": "./img/user-act.png"
+    }]
+  },
+
+  "sitemapLocation": "sitemap.json",
+
+  "lazyCodeLoading": "requiredComponents"
+  
+}

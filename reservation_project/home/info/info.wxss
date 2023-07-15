@@ -1,0 +1,28 @@
+/* pages/info/info.wxss */
+/* pages/home/home.wxss */
+body{
+  margin: 0rpx
+}
+.menu{
+  margin-top: 20%;
+}
+
+.menuStyle{
+  margin: 20rpx;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 1rpx 1rpx 5rpx 3rpx #a1a1a1;
+  /* height: 150rpx; */
+  
+}
+
+.tag{
+  padding-top: 40rpx;
+  padding-bottom: 30rpx;
+}
+
+.username{
+  /* border: solid black 3rpx; */
+  background-color: #eaedf4;
+  border-radius: 10rpx;
+}
