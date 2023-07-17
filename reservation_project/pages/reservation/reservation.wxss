@@ -109,8 +109,8 @@
   border-radius: 8rpx;
   text-align: center;
   /* line-height: 100rpx; */
-  
-  margin: 3rpx;
+  padding: 0rpx 10rpx;
+  margin: 5rpx;
 }
 .day{
   height: 50%;

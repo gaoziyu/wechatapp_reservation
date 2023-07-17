@@ -135,7 +135,7 @@ Page({
           let t = timelist[i].time.substring(0, 2)
           if (now - t >= 0 && that.data.dateIsActive == 0) {
             timelist[i].status = 2
-          }else{
+          } else {
             timelist[i].status = 0
           }
           // 定义是否已经选择属性
@@ -176,7 +176,7 @@ Page({
             time: res.result.data[i].time,
             res_number: res.result.data[i].res_number
           }
-          
+
           reservedTime = reservedTime.concat(obj)
         }
         for (let i = 0; i < reservedTime.length; i++) {
@@ -193,24 +193,24 @@ Page({
 
           // 判断是否满足人数要求，更新时间列表状态
           for (let i = 0; i < timelist.length; i++) {
-            
+
             let t = timelist[i].time.substring(0, 2)
             if (now - t >= 0 && that.data.dateIsActive == 0) {
               timelist[i].status = 2
-            }else{
+            } else {
               if (timelist[i].res_number + that.data.res_number > 4) {
                 timelist[i].status = 1
               }
             }
-            
+
           }
-      
+
         }
         that.setData({
           timelist: timelist
         })
 
-        
+
       },
       fail(res) {
         console.log("reservedTime失败")
@@ -220,7 +220,7 @@ Page({
   },
 
   // 获取预约人列表
-  getReservedUser: function(){
+  getReservedUser: function () {
     const that = this
     wx.cloud.callFunction({
       name: "getReservedTime",
@@ -238,10 +238,10 @@ Page({
             let key = item.time[i]
             let value = new Array(item.name + "*" + item.res_number)
             // console.log(value)
-            if(!(key in list)){
+            if (!(key in list)) {
               list[key] = value
-            }else{
-              list[key].push(item.name  + "*" + item.res_number)
+            } else {
+              list[key].push(item.name + "*" + item.res_number)
               // console.log(list[key])
             }
           }
@@ -287,7 +287,7 @@ Page({
     }
     // console.log(thisWeekday);
     // 循环计算未来六天的日期和星期并保存，用于页面渲染
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 17; i++) {
       // 获取日期
       let date;
       // let date = thisMonth + "." + (thisDay + i);
@@ -295,17 +295,34 @@ Page({
       switch (thisMonth) {
         case 1: case 3: case 5: case 7: case 8: case 10: case 12:
           // console.log("大月")
+          // console.log(this.data.thisYear)
           if (thisDay + i > 31) {
             if (thisMonth < 10) {
-              date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 31
+              if (((thisDay + i) % 31) < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 31
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 31
+              }
             } else {
-              date = (thisMonth + 1) + "." + (thisDay + i) % 31
+              if (((thisDay + i) % 31) < 10) {
+                date = (thisMonth + 1) + "." + "0" + (thisDay + i) % 31
+              } else {
+                date = (thisMonth + 1) + "." + (thisDay + i) % 31
+              }
             }
           } else {
             if (thisMonth < 10) {
-              date = "0" + thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i);
+              }
             } else {
-              date = thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = thisMonth + "." + (thisDay + i);
+              }
             }
 
           }
@@ -314,27 +331,72 @@ Page({
           // console.log("小月")
           if (thisDay + i > 30) {
             if (thisMonth < 9) {
-              date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 30
+              if ((thisDay + i) % 30 < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 30
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 30
+              }
             } else {
-              date = (thisMonth + 1) + "." + (thisDay + i) % 30
+              if ((thisDay + i) % 30 < 10) {
+                date = (thisMonth + 1) + "." + "0" + (thisDay + i) % 30
+              } else {
+                date = (thisMonth + 1) + "." + (thisDay + i) % 30
+              }
             }
 
           } else {
             if (thisMonth < 9) {
-              date = "0" + thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i);
+              }
             } else {
-              date = thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = thisMonth + "." + (thisDay + i);
+              }
             }
 
           }
           break;
         case 2:
           // console.log("平月")
-          if (thisDay + i > 28) {
-            date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 28
+          // 判断是非为闰年
+          let year = this.data.thisYear
+          if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            console.log("闰")
+            if (thisDay + i > 29) {
+              if ((thisDay + i) % 29 < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 29
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 29
+              }
+            } else {
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i)
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i)
+              }
+            }
           } else {
-            date = "0" + thisMonth + "." + (thisDay + i);
+            console.log("非闰")
+            if (thisDay + i > 28) {
+              if ((thisDay + i) % 28 < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 28
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 28
+              }
+            } else {
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i)
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i)
+              }
+            }
           }
+
           break;
       }
       let weekday = this.data.week[(thisWeekday + i) % 7];
@@ -393,13 +455,13 @@ Page({
     })
     // this.getTimes()
     // this.getReservedTime()
-    
+
   },
 
   // 日期选择点击事件
   selectDates: function (e) {
     this.getTimes()
-    
+
     // this.getReservedTime()
 
     // 切换日期情况时间按钮选择状态(样式)
