@@ -21,3 +21,17 @@
   font-size:x-small;
   border-radius: 10rpx;
 }
+
+.bottom{
+  font-size: x-small;
+  text-align: center;
+  color:rgba(126, 125, 125, 0.815);
+  margin-top: 20rpx;
+}
+
+.noRes{
+  font-size: small;
+  text-align: center;
+  color:rgba(126, 125, 125, 0.815);
+  margin-top: 50rpx;
+}

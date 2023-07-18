@@ -10,7 +10,8 @@
     "root": "home",
     "pages": [
       "myRes/myRes",
-      "info/info"
+      "info/info",
+      "about/about"
     ]
   }],
 
@@ -18,7 +19,7 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#5a8a7e",
-    "navigationBarTitleText": "用于测试的预约项目",
+    "navigationBarTitleText": "肆季日麻桌游",
     "navigationBarTextStyle":"white",
     "enablePullDownRefresh": false,
     "backgroundColor": "#efefef"

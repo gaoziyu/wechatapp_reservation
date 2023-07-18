@@ -59,6 +59,19 @@ Page({
     })
   },
 
+  about: function () {
+    console.log("toabout")
+    wx.navigateTo({
+      url: '/home/about/about',
+      success: function (res) {
+        console.log("跳转成功")
+      },
+      fail: function (res) {
+        console.log("跳转失败")
+      }
+    })
+  },
+
   login: function () {
     console.log("登录")
     let that = this
@@ -84,7 +97,7 @@ Page({
             isLogin: appData.isLogin
           })
         }
-        else{
+        else {
           console.log("未找到用户")
           wx.cloud.callFunction({
             name: "addUser",
@@ -93,7 +106,7 @@ Page({
               username: '匿名用户',
               tel: ''
             },
-            success: function(res) {
+            success: function (res) {
               console.log(res.result)
               appData.userInfo = {
                 username: "nimingyonghu"

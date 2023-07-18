@@ -1,0 +1,41 @@
+<!--home/about/about.wxml-->
+<view>
+  <view class="items">
+    <view class="title">设备介绍</view>
+    <view class="content">
+      <view>1.大洋化学JP-EX四口机一台</view>
+      <view>2.大洋化学JP-C四口机一台</view>
+      <view>3.大洋化学REXX3八口机两台</view>
+    </view>
+  </view>
+
+
+
+  <view class="items">
+    <view class="title">营业时间</view>
+    <view class="content">本店24小时营业，须提前预约</view>
+  </view>
+
+
+
+
+  <view class="items">
+    <view class="title">注意事项</view>
+    <view class="content">
+      <view>1.未满18周岁禁止入内</view>
+      <view>2.本店禁烟，禁止各种形式的赌博</view>
+      <view>3.请提前预约</view>
+      <view>4.如需取消预约，请提前联系工作人员</view>
+    </view>
+  </view>
+
+  <view class="items">
+    <view class="title">联系我们</view>
+    <view class="content">
+      <view>联系方式：15316562397</view>
+      <view>老板QQ：459757536</view>
+      <view>约战QQ群：391396082</view>
+    </view>
+  </view>
+
+</view>

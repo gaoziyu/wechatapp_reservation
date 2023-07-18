@@ -1,11 +1,11 @@
 // app.js
 App({
 
-  
+
 
   onLaunch() {
     wx.cloud.init({
-      env: "myenv-4g5fwgk2a1952600",
+      env: "cloud1-7gnjhxitb84adbe7",
     })
     wx.cloud.callFunction({
       name: 'login',
@@ -19,6 +19,10 @@ App({
         console.error('[云函数] [login] 调用失败', err)
       }
     })
+    wx.showShareMenu({
+      withShareTicket: true,
+      menu: ['shareAppMessage', 'shareTimeline']
+    })
   },
 
   globalData: {
@@ -28,6 +32,7 @@ App({
     isLogin: false,
     openid: ''
   },
-  
+
+
 
 })

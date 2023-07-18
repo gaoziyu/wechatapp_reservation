@@ -21,7 +21,7 @@
     </view>
   </view>
 
- <!-- 人数选择 -->
+  <!-- 人数选择 -->
   <view class="form">
     <view style="padding: 15rpx;">
       选择人数
@@ -39,22 +39,41 @@
       选择时间
     </view>
     <!-- 日历区域，上一步选择后显示 -->
-    <view wx:if="{{itemIsActive != -1 && numIsActive != -1}}" class="calendarArea">
-      <view class="calendar {{dateIsActive == index ? 'active' : 'unActive'}}" wx:for="{{dates}}" wx:key="index" data-index="{{index}}" bindtap="selectDates">
-        <!-- 日期 -->
-        <view class="day date">
+    <scroll-view scroll-x style='display: flex;white-space:nowrap;' class=''>
+      <view wx:if="{{itemIsActive != -1 && numIsActive != -1}}" class="calendarArea">
+        <view class="calendar {{dateIsActive == index ? 'active' : 'unActive'}}" wx:for="{{dates}}" wx:key="index" data-index="{{index}}" bindtap="selectDates">
+          <!-- 日期 -->
+          <view class="day date">
+            {{item.date}}
+          </view>
+          <view class="day weekday">
+            {{item.weekday}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 日历区域，上一步未选择区域 -->
+      <view wx:else class="calendarArea calendarText">
+        请先选择项目
+      </view>
+    </scroll-view>
+
+    <!-- <view wx:if="{{itemIsActive != -1 && numIsActive != -1}}" class="calendarArea">
+      <view class="calendar {{dateIsActive == index ? 'active' : 'unActive'}}" wx:for="{{dates}}" wx:key="index" data-index="{{index}}" bindtap="selectDates"> -->
+    <!-- 日期 -->
+    <!-- <view class="day date">
           {{item.date}}
         </view>
         <view class="day weekday">
           {{item.weekday}}
         </view>
       </view>
-        
-    </view>
+
+    </view> -->
     <!-- 日历区域，上一步未选择区域 -->
-    <view wx:else class="calendarArea calendarText">
+    <!-- <view wx:else class="calendarArea calendarText">
       请先选择项目
-    </view>
+    </view> -->
 
     <!-- 时间区域 -->
     <view wx:if="{{itemIsActive != -1 && numIsActive != -1 && dateIsActive!= -1}}" class="timeArea">
@@ -72,11 +91,11 @@
   </view>
 
   <!-- 该时间段已预约人列表 -->
-  <view class="form" >
+  <view class="form">
     <view style="padding: 15rpx;">
       该时间段已预约用户
     </view>
-    <view class="reservedUsersList"  wx:if="{{userList.length != 0}}">
+    <view class="reservedUsersList" wx:if="{{userList.length != 0}}">
       <view wx:for="{{userList}}">
         {{item}}
       </view>
@@ -101,7 +120,7 @@
       <view>
         <textarea model:value="{{notes}}" placeholder="在此输入..." class="notes" name="remark" />
       </view>
-      
+
     </view>
 
   </view>

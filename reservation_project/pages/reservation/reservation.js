@@ -116,6 +116,10 @@ Page({
 
   // 获取预约时间列表
   getTimes: function (e) {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     let that = this
     let timelist
     // 当前时间，只保留小时
@@ -135,7 +139,7 @@ Page({
           let t = timelist[i].time.substring(0, 2)
           if (now - t >= 0 && that.data.dateIsActive == 0) {
             timelist[i].status = 2
-          }else{
+          } else {
             timelist[i].status = 0
           }
           // 定义是否已经选择属性
@@ -144,16 +148,25 @@ Page({
         that.setData({
           timelist: timelist
         })
+
         that.getReservedTime()
+
       },
       fail(res) {
         console.log("getTimes失败：" + res)
+      },
+      complete() {
+        wx.hideLoading()
       }
     })
   },
 
   // 获取已被预约时间
   getReservedTime: function () {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     // this.getTimes()
     let that = this
     let reservedTime = []
@@ -176,7 +189,7 @@ Page({
             time: res.result.data[i].time,
             res_number: res.result.data[i].res_number
           }
-          
+
           reservedTime = reservedTime.concat(obj)
         }
         for (let i = 0; i < reservedTime.length; i++) {
@@ -193,34 +206,41 @@ Page({
 
           // 判断是否满足人数要求，更新时间列表状态
           for (let i = 0; i < timelist.length; i++) {
-            
+
             let t = timelist[i].time.substring(0, 2)
             if (now - t >= 0 && that.data.dateIsActive == 0) {
               timelist[i].status = 2
-            }else{
+            } else {
               if (timelist[i].res_number + that.data.res_number > 4) {
                 timelist[i].status = 1
               }
             }
-            
+
           }
-      
+
         }
         that.setData({
           timelist: timelist
         })
 
-        
+
       },
       fail(res) {
         console.log("reservedTime失败")
+      },
+      complete() {
+        wx.hideLoading()
       }
     })
 
   },
 
   // 获取预约人列表
-  getReservedUser: function(){
+  getReservedUser: function () {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     const that = this
     wx.cloud.callFunction({
       name: "getReservedTime",
@@ -229,19 +249,20 @@ Page({
         item: that.data.item,
       },
       success(res) {
-        // console.log("预约列表：",res.result.data)
+        console.log("预约列表：", res.result.data)
         let data = res.result.data
         let list = {}
+
         for (let i = 0; i < data.length; i++) {
           let item = data[i]
           for (let i = 0; i < item.time.length; i++) {
             let key = item.time[i]
             let value = new Array(item.name + "*" + item.res_number)
             // console.log(value)
-            if(!(key in list)){
+            if (!(key in list)) {
               list[key] = value
-            }else{
-              list[key].push(item.name  + "*" + item.res_number)
+            } else {
+              list[key].push(item.name + "*" + item.res_number)
               // console.log(list[key])
             }
           }
@@ -250,9 +271,13 @@ Page({
         that.setData({
           reservedUser: list
         })
+
       },
       fail(res) {
         console.log("getReservedTime失败")
+      },
+      complete() {
+        wx.hideLoading()
       }
     })
   },
@@ -287,7 +312,7 @@ Page({
     }
     // console.log(thisWeekday);
     // 循环计算未来六天的日期和星期并保存，用于页面渲染
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 14; i++) {
       // 获取日期
       let date;
       // let date = thisMonth + "." + (thisDay + i);
@@ -295,17 +320,34 @@ Page({
       switch (thisMonth) {
         case 1: case 3: case 5: case 7: case 8: case 10: case 12:
           // console.log("大月")
+          // console.log(this.data.thisYear)
           if (thisDay + i > 31) {
             if (thisMonth < 10) {
-              date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 31
+              if (((thisDay + i) % 31) < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 31
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 31
+              }
             } else {
-              date = (thisMonth + 1) + "." + (thisDay + i) % 31
+              if (((thisDay + i) % 31) < 10) {
+                date = (thisMonth + 1) + "." + "0" + (thisDay + i) % 31
+              } else {
+                date = (thisMonth + 1) + "." + (thisDay + i) % 31
+              }
             }
           } else {
             if (thisMonth < 10) {
-              date = "0" + thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i);
+              }
             } else {
-              date = thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = thisMonth + "." + (thisDay + i);
+              }
             }
 
           }
@@ -314,27 +356,72 @@ Page({
           // console.log("小月")
           if (thisDay + i > 30) {
             if (thisMonth < 9) {
-              date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 30
+              if ((thisDay + i) % 30 < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 30
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 30
+              }
             } else {
-              date = (thisMonth + 1) + "." + (thisDay + i) % 30
+              if ((thisDay + i) % 30 < 10) {
+                date = (thisMonth + 1) + "." + "0" + (thisDay + i) % 30
+              } else {
+                date = (thisMonth + 1) + "." + (thisDay + i) % 30
+              }
             }
 
           } else {
             if (thisMonth < 9) {
-              date = "0" + thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i);
+              }
             } else {
-              date = thisMonth + "." + (thisDay + i);
+              if ((thisDay + i) < 10) {
+                date = thisMonth + "." + "0" + (thisDay + i);
+              } else {
+                date = thisMonth + "." + (thisDay + i);
+              }
             }
 
           }
           break;
         case 2:
           // console.log("平月")
-          if (thisDay + i > 28) {
-            date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 28
+          // 判断是非为闰年
+          let year = this.data.thisYear
+          if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            console.log("闰")
+            if (thisDay + i > 29) {
+              if ((thisDay + i) % 29 < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 29
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 29
+              }
+            } else {
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i)
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i)
+              }
+            }
           } else {
-            date = "0" + thisMonth + "." + (thisDay + i);
+            console.log("非闰")
+            if (thisDay + i > 28) {
+              if ((thisDay + i) % 28 < 10) {
+                date = "0" + (thisMonth + 1) + "." + "0" + (thisDay + i) % 28
+              } else {
+                date = "0" + (thisMonth + 1) + "." + (thisDay + i) % 28
+              }
+            } else {
+              if ((thisDay + i) < 10) {
+                date = "0" + thisMonth + "." + "0" + (thisDay + i)
+              } else {
+                date = "0" + thisMonth + "." + (thisDay + i)
+              }
+            }
           }
+
           break;
       }
       let weekday = this.data.week[(thisWeekday + i) % 7];
@@ -365,19 +452,22 @@ Page({
    */
   // 项目选择点击事件
   selectItems: function (e) {
-    this.getTimes();
+    // this.getTimes();
     let itemId = e.currentTarget.dataset.id;
     let item = this.data.itemList[itemId];
-    // console.log(item);
+    console.log(item.name);
+    
     this.setData({
       itemIsActive: itemId,
       item: item.name,
       isTimeContinuous: false,
       selectedTimeList: [],
-      userList: []
+      userList: [],
+      reservedUser: []
     })
     // console.log(this.data.item)
-
+    this.getTimes();
+    this.getReservedUser()
   },
 
   // 人数选择点击事件
@@ -393,13 +483,13 @@ Page({
     })
     // this.getTimes()
     // this.getReservedTime()
-    
+
   },
 
   // 日期选择点击事件
   selectDates: function (e) {
     this.getTimes()
-    
+
     // this.getReservedTime()
 
     // 切换日期情况时间按钮选择状态(样式)
@@ -504,15 +594,7 @@ Page({
     let telephoneNum = this.data.telephoneNum
 
     var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
-    if (telephoneNum == 0) {
-      this.setData({
-        telephoneNumIsWrong: true
-      })
-    } else if (telephoneNum < 11) {
-      this.setData({
-        telephoneNumIsWrong: true
-      })
-    } else if (!myreg.test(telephoneNum)) {
+    if (telephoneNum == 0 || telephoneNum < 11 || !myreg.test(telephoneNum)) {
       this.setData({
         telephoneNumIsWrong: true
       })
@@ -604,11 +686,16 @@ Page({
         icon: "error", // 图标，默认success
       })
     } else {
+      wx.showLoading({
+        title: '提交中...',
+        mask: true
+      })
       // 添加预约记录
       userCollection.add({
         data: this.data.retData
       }).then(res => {
         console.log('添加成功', res)
+        wx.hideLoading()
         wx.showToast({
           title: "预约成功！", // 提示的内容
           icon: "success", // 图标，默认success
@@ -617,19 +704,16 @@ Page({
         this.setData({
           playerName: '',
           telephoneNum: '',
-          notes: ''
+          notes: '',
+          isTimeContinuous: false,
+          selectedTimeList: [],
+          userList: []
         })
         this.getReservedUser()
       }).catch(err => {
         console.log('添加失败', err)//失败提示错误信息
       })
     }
-
-    this.setData({
-      isTimeContinuous: false,
-      selectedTimeList: [],
-      userList: []
-    })
 
   },
 
