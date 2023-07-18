@@ -10,7 +10,8 @@ Page({
   data: {
     // 轮播图数据
     swiperList: [],
-    tablelist: []
+    tablelist: [],
+    tablelistLoading: true
   },
 
   /**
@@ -34,7 +35,8 @@ Page({
       success(res) {
         console.log("获取成功：", res.result.data)
         that.setData({
-          tablelist: res.result.data
+          tablelist: res.result.data,
+          tablelistLoading: false
         })
       },
       fail(res) {

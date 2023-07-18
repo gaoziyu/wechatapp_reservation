@@ -1,0 +1,17 @@
+/* home/about/about.wxss */
+.items{
+  margin: 20rpx;
+  color: rgba(143, 143, 143, 0.815);
+  padding: 10rpx;
+  font-size: small;
+}
+
+.title{
+  color: black;
+  font-weight: bold;
+  font-size: medium;
+  margin-bottom: 15rpx;
+}
+.content{
+  margin-left: 20rpx;
+}

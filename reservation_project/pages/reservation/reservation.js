@@ -116,6 +116,10 @@ Page({
 
   // 获取预约时间列表
   getTimes: function (e) {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     let that = this
     let timelist
     // 当前时间，只保留小时
@@ -144,16 +148,25 @@ Page({
         that.setData({
           timelist: timelist
         })
+
         that.getReservedTime()
+
       },
       fail(res) {
         console.log("getTimes失败：" + res)
+      },
+      complete() {
+        wx.hideLoading()
       }
     })
   },
 
   // 获取已被预约时间
   getReservedTime: function () {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     // this.getTimes()
     let that = this
     let reservedTime = []
@@ -214,6 +227,9 @@ Page({
       },
       fail(res) {
         console.log("reservedTime失败")
+      },
+      complete() {
+        wx.hideLoading()
       }
     })
 
@@ -221,6 +237,10 @@ Page({
 
   // 获取预约人列表
   getReservedUser: function () {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     const that = this
     wx.cloud.callFunction({
       name: "getReservedTime",
@@ -229,9 +249,10 @@ Page({
         item: that.data.item,
       },
       success(res) {
-        // console.log("预约列表：",res.result.data)
+        console.log("预约列表：", res.result.data)
         let data = res.result.data
         let list = {}
+
         for (let i = 0; i < data.length; i++) {
           let item = data[i]
           for (let i = 0; i < item.time.length; i++) {
@@ -250,9 +271,13 @@ Page({
         that.setData({
           reservedUser: list
         })
+
       },
       fail(res) {
         console.log("getReservedTime失败")
+      },
+      complete() {
+        wx.hideLoading()
       }
     })
   },
@@ -287,7 +312,7 @@ Page({
     }
     // console.log(thisWeekday);
     // 循环计算未来六天的日期和星期并保存，用于页面渲染
-    for (let i = 0; i < 17; i++) {
+    for (let i = 0; i < 14; i++) {
       // 获取日期
       let date;
       // let date = thisMonth + "." + (thisDay + i);
@@ -427,19 +452,22 @@ Page({
    */
   // 项目选择点击事件
   selectItems: function (e) {
-    this.getTimes();
+    // this.getTimes();
     let itemId = e.currentTarget.dataset.id;
     let item = this.data.itemList[itemId];
-    // console.log(item);
+    console.log(item.name);
+    
     this.setData({
       itemIsActive: itemId,
       item: item.name,
       isTimeContinuous: false,
       selectedTimeList: [],
-      userList: []
+      userList: [],
+      reservedUser: []
     })
     // console.log(this.data.item)
-
+    this.getTimes();
+    this.getReservedUser()
   },
 
   // 人数选择点击事件
@@ -566,15 +594,7 @@ Page({
     let telephoneNum = this.data.telephoneNum
 
     var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
-    if (telephoneNum == 0) {
-      this.setData({
-        telephoneNumIsWrong: true
-      })
-    } else if (telephoneNum < 11) {
-      this.setData({
-        telephoneNumIsWrong: true
-      })
-    } else if (!myreg.test(telephoneNum)) {
+    if (telephoneNum == 0 || telephoneNum < 11 || !myreg.test(telephoneNum)) {
       this.setData({
         telephoneNumIsWrong: true
       })
@@ -666,11 +686,16 @@ Page({
         icon: "error", // 图标，默认success
       })
     } else {
+      wx.showLoading({
+        title: '提交中...',
+        mask: true
+      })
       // 添加预约记录
       userCollection.add({
         data: this.data.retData
       }).then(res => {
         console.log('添加成功', res)
+        wx.hideLoading()
         wx.showToast({
           title: "预约成功！", // 提示的内容
           icon: "success", // 图标，默认success
@@ -679,19 +704,16 @@ Page({
         this.setData({
           playerName: '',
           telephoneNum: '',
-          notes: ''
+          notes: '',
+          isTimeContinuous: false,
+          selectedTimeList: [],
+          userList: []
         })
         this.getReservedUser()
       }).catch(err => {
         console.log('添加失败', err)//失败提示错误信息
       })
     }
-
-    this.setData({
-      isTimeContinuous: false,
-      selectedTimeList: [],
-      userList: []
-    })
 
   },
 

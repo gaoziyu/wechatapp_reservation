@@ -1,7 +1,7 @@
 // app.js
 App({
 
-  
+
 
   onLaunch() {
     wx.cloud.init({
@@ -19,6 +19,10 @@ App({
         console.error('[云函数] [login] 调用失败', err)
       }
     })
+    wx.showShareMenu({
+      withShareTicket: true,
+      menu: ['shareAppMessage', 'shareTimeline']
+    })
   },
 
   globalData: {
@@ -28,6 +32,7 @@ App({
     isLogin: false,
     openid: ''
   },
-  
+
+
 
 })

@@ -1,10 +1,21 @@
 <!--pages/myRes/myRes.wxml-->
-<view wx:for="{{resList}}" wx:if="{{item.status}}" class="labelCard">
-  <!-- <view>预约创建时间:{{item.create_date}}</view> -->
-  <text decode="true" wx:if="{{index == 0}}" class="newTag">&ensp;New!&ensp;</text>
-  <view>项目：{{item.item}}</view>
-  <view>预约时间：{{item.date}} {{item.time}}</view>
-  <view>联系人：{{item.name}}</view>
-  <view>联系方式：{{item.tel}}</view>
-  
+<van-notice-bar
+  left-icon="volume-o"
+  text="如需取消预约请联系工作人员"
+/>
+
+<view wx:if="{{resList.length != 0}}">
+  <view wx:for="{{resList}}" wx:if="{{item.status}}" class="labelCard">
+    <!-- <view>预约创建时间:{{item.create_date}}</view> -->
+    <text decode="true" wx:if="{{index == 0}}" class="newTag">&ensp;New!&ensp;</text>
+    <view>项目：{{item.item}}</view>
+    <view>预约时间：{{item.date}} {{item.time}}</view>
+    <view>联系人：{{item.name}}</view>
+    <view>联系方式：{{item.tel}}</view>
+  </view>
+  <view class="bottom">
+    <view class="bottomContent">——————————到底啦——————————</view>
+  </view>
 </view>
+
+<view wx:else class="noRes">暂无预约哦~</view>

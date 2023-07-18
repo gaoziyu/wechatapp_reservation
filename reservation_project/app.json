@@ -10,7 +10,8 @@
     "root": "home",
     "pages": [
       "myRes/myRes",
-      "info/info"
+      "info/info",
+      "about/about"
     ]
   }],
 
