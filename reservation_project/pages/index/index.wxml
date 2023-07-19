@@ -10,10 +10,10 @@
 
   <van-skeleton title row="3" loading="{{ tablelistLoading }}">
     <view class="reservations">
-      <view wx:for="{{tablelist}}" class="imgbox">
-        <image class="img" src="{{item.pro_pic}}" mode="widthFix"></image>
+      <view wx:for="{{tablelist}}" class="imgbox" bind:tap="toRes" data-table_name="{{item.table_name}}" data-table_id="{{item.table_id}}">
+        <image class="img" src="{{item.table_pic}}" mode="widthFix"></image>
         <view class="imgText">
-          {{item.name}}
+          {{item.table_name}}
         </view>
       </view>
     </view>

@@ -17,7 +17,7 @@
     </view>
     <!-- 循环生成预约项目选择按钮 -->
     <view class="items">
-      <view class="item {{itemIsActive == index ? 'active' : 'unActive'}}" wx:for="{{itemList}}" wx:key="{{item.pro_id}}" data-id="{{item.pro_id}}" bindtap="selectItems">{{item.name}}</view>
+      <view class="item {{itemIsActive == index ? 'active' : 'unActive'}}" wx:for="{{itemList}}" wx:key="{{item.table_id}}" data-id="{{item.table_id}}" bindtap="selectItems">{{item.table_name}}</view>
     </view>
   </view>
 
@@ -80,7 +80,9 @@
       <!-- 状态码status：0-可选，1-已被选，2-不可选，3-已满 -->
       <view wx:for="{{timelist}}" wx:key="index" bindtap="selectTime" data-status="{{item.status}}" data-index="{{index}}" data-time="{{item.time}}" class="time {{item.status == 0 ? 'selectable' : ( item.status == 1 ? 'selected' : ( item.status == 2 ? 'unSelectable' : 'alreadyFull') )}} {{item.timeIsSelect ? 'timeActive' : ''}}">
         {{item.time}}
+        <view class="progress {{ item.res_number == 0 ? '' :(item.res_number == 1 ? 'resNum_1' :(item.res_number == 2 ? 'resNum_2' : (item.res_number == 3 ? 'resNum_3' : 'resNum_4')))}}"></view>
       </view>
+
     </view>
 
     <!-- 时间选择不连续 -->
@@ -97,7 +99,7 @@
     </view>
     <view class="reservedUsersList" wx:if="{{userList.length != 0}}">
       <view wx:for="{{userList}}">
-        {{item}}
+        {{item.username}} 预约 {{item.res_number}} 人<text wx:if="{{item.notes != ''}}">，备注：{{item.notes}}</text>
       </view>
     </view>
     <view class="reservedUsersList nobody" wx:else="">
