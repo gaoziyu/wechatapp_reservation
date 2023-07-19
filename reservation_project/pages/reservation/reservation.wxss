@@ -1,26 +1,27 @@
 /* pages/reservation/reservation.wxss */
 
 
-.container{
+.container {
   padding: 0rpx;
 }
 
-.form{
+.form {
   margin-top: 20rpx;
   background-color: #ffffff;
   width: 90%;
   border-radius: 20rpx;
   box-shadow: 1rpx 1rpx 5rpx 3rpx #a1a1a1;
-  
+
 }
 
-.address{
+.address {
   padding: 15rpx;
   padding-bottom: 0rpx;
   margin-left: 20rpx;
   /* height: 100rpx; */
 }
-.address_content{
+
+.address_content {
   padding: 15rpx;
   font-size: small;
   color: #6c6c6c;
@@ -28,7 +29,7 @@
   margin-bottom: 15rpx;
 }
 
-.items{
+.items {
   padding: 10rpx;
   display: flex;
   flex-direction: row;
@@ -36,7 +37,8 @@
   width: 97%;
   flex-wrap: wrap;
 }
-.item{
+
+.item {
   flex: 1;
   /* height: 120px; */
   margin: 0 10rpx 10rpx 0;
@@ -52,11 +54,12 @@
   line-height: 70rpx;
   font-size: small;
 }
-.item:nth-child(3n) { 
+
+.item:nth-child(3n) {
   margin-right: 0;
 }
 
-.peopleNumList{
+.peopleNumList {
   padding: 10rpx;
   display: flex;
   flex-direction: row;
@@ -65,7 +68,7 @@
   flex-wrap: wrap;
 }
 
-.num{
+.num {
   flex: 1;
   /* height: 120px; */
   margin: 0 10rpx 10rpx 0;
@@ -82,27 +85,31 @@
   line-height: 70rpx;
   font-size: small;
 }
-.num:nth-child(4n) { 
+
+.num:nth-child(4n) {
   margin-right: 0;
 }
 
 
-.unActive{
+.unActive {
   background-color: #f2f2f2;
 }
-.active{
+
+.active {
   background-color: #549f8a;
 }
 
-.calendarArea{
+.calendarArea {
   padding: 15rpx;
   display: flex;
   flex-direction: row;
 }
-.calendarText{
+
+.calendarText {
   color: #9ba1c3;
 }
-.calendar{
+
+.calendar {
   /* background-color: #f2f2f2; */
   /* height: 100rpx; */
   width: 24%;
@@ -112,19 +119,24 @@
   padding: 0rpx 10rpx;
   margin: 5rpx;
 }
-.day{
+
+.day {
   height: 50%;
   line-height: 50%x;
   margin: 4rpx;
 }
-.date{
-  font-size:medium;
-}
-.weekday{
-  font-size:xx-small;
+
+.date {
+  font-size: medium;
 }
 
-.timeArea{
+.weekday {
+  font-size: xx-small;
+}
+
+
+
+.timeArea {
   background-color: #e7e7e7;
   margin: 0rpx 20rpx 0rpx 20rpx;
   border-radius: 10rpx;
@@ -137,7 +149,8 @@
   justify-content: flex-start;
   /* justify-content:space-around; */
 }
-.time{
+
+.time {
   flex: 1;
   /* height: 120px; */
   margin: 0 20rpx 20rpx 0;
@@ -146,6 +159,7 @@
   min-width: calc((100% - 80rpx) / 5);
   max-width: calc((100% - 80rpx) / 5);
 
+  position: relative;
 
   border-radius: 10rpx;
   height: 80rpx;
@@ -153,59 +167,102 @@
   line-height: 80rpx;
   font-size: small;
 }
-.time:nth-child(5n) { 
+
+.time:nth-child(5n) {
   margin-right: 0;
 }
-.selectable{
+
+.progress {
+
+  position: absolute;
+  left: 0rpx;
+  top: 0rpx;
+  border-radius: 10rpx;
+}
+
+.resNum_1 {
+  width: 25%;
+  height: 10rpx;
+  background-color: rgba(34, 167, 29, 0.603);
+  /* background-color: rgba(207, 31, 0, 0.603); */
+}
+
+.resNum_2 {
+  width: 50%;
+  height: 10rpx;
+  background-color: rgba(34, 167, 29, 0.603);
+  /* background-color: rgba(207, 31, 0, 0.603); */
+}
+
+.resNum_3 {
+  width: 75%;
+  height: 10rpx;
+  background-color: rgba(34, 167, 29, 0.603);
+  /* background-color: rgba(207, 31, 0, 0.603); */
+}
+
+.resNum_4 {
+  width: 100%;
+  height: 10rpx;
+  background-color: rgba(34, 167, 29, 0.603);
+  /* background-color: rgba(207, 31, 0, 0.603); */
+}
+
+.selectable {
   color: black;
   background-color: #ffffff;
 }
-.unSelectable{
+
+.unSelectable {
   color: white;
   background-color: #d2d6e1;
 }
-.selected{
+
+.selected {
   color: white;
   background-color: #c2d8ae;
 }
+
 .alreadyFull {
   color: white;
   background-color: #ff7171;
 }
 
-.timeActive{
+.timeActive {
   background-color: #549f8a;
 }
 
-.reservedUsersList{
+.reservedUsersList {
   padding-left: 40rpx;
   line-height: 50rpx;
   font-size: small;
   margin-bottom: 20rpx;
-  
+
 }
-.nobody{
+
+.nobody {
   font-size: x-small;
   color: #cad5e5;
 }
 
-.contiune{
-  font-size:xx-small;
+.contiune {
+  font-size: xx-small;
   margin-left: 30rpx;
-  margin-bottom:10rpx;
+  margin-bottom: 10rpx;
   color: #c85d5a;
 }
 
-.contact{
+.contact {
   padding: 15rpx;
   /* height: 260rpx; */
 }
 
-.notestext{
+.notestext {
   font-size: xx-small;
   color: #969696c0;
 }
-.notes{
+
+.notes {
   margin: 10rpx;
   width: 95%;
   height: 150rpx;
@@ -215,17 +272,17 @@
   border-radius: 20rpx;
 }
 
-.button{
+.button {
   margin-top: 20rpx;
   width: 90%;
 }
 
 
-.unLogin{
+.unLogin {
   margin-top: 50%;
   color: #9ba4b8;
 }
-.img{
+
+.img {
   width: 200rpx;
 }
-

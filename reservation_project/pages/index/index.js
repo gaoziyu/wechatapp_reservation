@@ -2,6 +2,7 @@
 // 获取应用实例
 const app = getApp()
 const DB = wx.cloud.database().collection("list")
+const appData = getApp().globalData
 Page({
 
   /**
@@ -24,25 +25,45 @@ Page({
 
   // 获取轮播图数据
   getSwiperList() {
-    console.log("getSwiperList()")
+    // console.log("getSwiperList()")
   },
 
   getTableList() {
-    console.log("getTableList()")
+    // console.log("getTableList()")
     let that = this
     wx.cloud.callFunction({
-      name: "get_items",
+      name: "getTablelist",
       success(res) {
-        console.log("获取成功：", res.result.data)
+        // console.log("获取成功：", res.result.data)
         that.setData({
           tablelist: res.result.data,
           tablelistLoading: false
         })
       },
       fail(res) {
-
+        console.log("获取失败")
       }
     })
+  },
+
+  toRes(e) {
+    console.log("toRes")
+    let itemIsActive = e.currentTarget.dataset.table_id;
+    let item = e.currentTarget.dataset.table_name;
+    appData.itemIsActive = itemIsActive
+    appData.item = item
+    console.log("appData.itemIsActive:", appData.itemIsActive)
+    console.log("appData.item:", appData.item)
+    if(appData.isLogin){
+      wx.switchTab({
+        url: '/pages/reservation/reservation'
+      });
+    }else{
+      wx.switchTab({
+        url: '/pages/home/home'
+      });
+    }
+    
   }
 })
 

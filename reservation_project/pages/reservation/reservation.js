@@ -50,18 +50,22 @@ Page({
     // 状态码status：0-可选，1-已被选，2-不可选，
     // 样式控制timeIsSelect
     timelist: [
-      { time: "10:00", status: 0, timeIsSelect: 0 },
+      { time: "10:00", status: 0, timeIsSelect: 0, res_number: 0 },
     ],
     selectedTimeList: [],
     selectedTimeListLength: 0,
     isTimeContinuous: false,
 
     // 预约列表
+    // 已预约时间列表
+    reservedTime: [],
+    // 以时间为key的重整预约列表{时间段：预约人列表}
     reservedUser: {},
+    // 某时间段的预约人列表
     userList: [],
 
     // 联系方式相关数据
-    // playerName: this.userInfo.username,
+    // playerName: appData.userInfo.username,
     // telephoneNum: this.userInfo.tel,
     playerName: '',
     telephoneNum: '',
@@ -101,7 +105,7 @@ Page({
   getItems: function (e) {
     let that = this
     wx.cloud.callFunction({
-      name: "get_items",
+      name: "getTablelist",
       success(res) {
         // console.log("getItems成功：", res.result.data)
         that.setData({
@@ -116,63 +120,40 @@ Page({
 
   // 获取预约时间列表
   getTimes: function (e) {
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    })
+    // wx.showLoading({
+    //   title: '加载中...',
+    //   mask: true
+    // })
     let that = this
-    let timelist
-    // 当前时间，只保留小时
-    let now = new Date().toTimeString().substring(0, 2)
-    // let today = this.data.dateIsActive
-    // console.log("today:", today)
     wx.cloud.callFunction({
       name: "get_times",
       success(res) {
         // console.log("getTimes成功", res.result.data)
-        timelist = res.result.data
-        // console.log("getTimes成功", timelist)
-        for (let i = 0; i < timelist.length; i++) {
-          // 定义已定人数属性
-          timelist[i].res_number = 0
-          // 定义状态属性
-          let t = timelist[i].time.substring(0, 2)
-          if (now - t >= 0 && that.data.dateIsActive == 0) {
-            timelist[i].status = 2
-          } else {
-            timelist[i].status = 0
-          }
-          // 定义是否已经选择属性
-          timelist[i].timeIsSelect = 0
-        }
+        let timelist = res.result.data
         that.setData({
           timelist: timelist
         })
-
+        that.timeListHandle()
         that.getReservedTime()
-
+        that.getReservedUser()
       },
       fail(res) {
         console.log("getTimes失败：" + res)
       },
       complete() {
-        wx.hideLoading()
+        // wx.hideLoading()
       }
     })
   },
 
   // 获取已被预约时间
   getReservedTime: function () {
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    })
-    // this.getTimes()
+    // wx.showLoading({
+    //   title: '加载中...',
+    //   mask: true
+    // })
     let that = this
     let reservedTime = []
-    let timelist = this.data.timelist
-    let now = new Date().toTimeString().substring(0, 2)
-    // console.log("timelist:", timelist)
     wx.cloud.callFunction({
       name: "getReservedTime",
       data: {
@@ -181,55 +162,24 @@ Page({
       },
       success(res) {
         // console.log("已预约时间：",res.result.data)
-        // let timeUserList = {}
-        // 定义已预约时间对象
+        // 定义已预约时间对象，提取预约时间与预约人数信息
         for (let i = 0; i < res.result.data.length; i++) {
-          // 提取预约时间与预约人数信息
           let obj = {
             time: res.result.data[i].time,
             res_number: res.result.data[i].res_number
           }
-
           reservedTime = reservedTime.concat(obj)
         }
-        for (let i = 0; i < reservedTime.length; i++) {
-          let time = reservedTime[i].time
-          let res_num = reservedTime[i].res_number
-          // 更新时间列表已预定人数属性
-          for (let i = 0; i < time.length; i++) {
-            timelist.find(item => {
-              if (item.time == time[i]) {
-                item.res_number += res_num
-              }
-            })
-          }
-
-          // 判断是否满足人数要求，更新时间列表状态
-          for (let i = 0; i < timelist.length; i++) {
-
-            let t = timelist[i].time.substring(0, 2)
-            if (now - t >= 0 && that.data.dateIsActive == 0) {
-              timelist[i].status = 2
-            } else {
-              if (timelist[i].res_number + that.data.res_number > 4) {
-                timelist[i].status = 1
-              }
-            }
-
-          }
-
-        }
         that.setData({
-          timelist: timelist
+          reservedTime: reservedTime
         })
-
-
+        that.reservedTimeHandle()
       },
       fail(res) {
         console.log("reservedTime失败")
       },
       complete() {
-        wx.hideLoading()
+        // wx.hideLoading()
       }
     })
 
@@ -237,10 +187,10 @@ Page({
 
   // 获取预约人列表
   getReservedUser: function () {
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    })
+    // wx.showLoading({
+    //   title: '加载中...',
+    //   mask: true
+    // })
     const that = this
     wx.cloud.callFunction({
       name: "getReservedTime",
@@ -249,20 +199,26 @@ Page({
         item: that.data.item,
       },
       success(res) {
-        console.log("预约列表：", res.result.data)
+        // console.log("预约列表：", res.result.data)
         let data = res.result.data
+        // {
+        // 09:00: (2) ["gao*3", "kkk*1"]
+        // 10:00: (2) ["gao*3", "kkk*1"]
+        // 11:00: (2) ["gao*3", "kkk*1"]
+        // }
         let list = {}
 
         for (let i = 0; i < data.length; i++) {
           let item = data[i]
           for (let i = 0; i < item.time.length; i++) {
             let key = item.time[i]
-            let value = new Array(item.name + "*" + item.res_number)
-            // console.log(value)
+            // let value = new Array(item.name + "*" + item.res_number)
+            let value = {username: item.name, res_number: item.res_number, notes: item.notes}
+            // console.log(value.notes)
             if (!(key in list)) {
-              list[key] = value
+              list[key] = new Array(value)
             } else {
-              list[key].push(item.name + "*" + item.res_number)
+              list[key].push(value)
               // console.log(list[key])
             }
           }
@@ -277,7 +233,7 @@ Page({
         console.log("getReservedTime失败")
       },
       complete() {
-        wx.hideLoading()
+        // wx.hideLoading()
       }
     })
   },
@@ -445,7 +401,85 @@ Page({
     console.log(this.data.thisDate)
   },
 
+  /**
+   * 数据处理函数 
+   */
+  // 时间列表处理函数
+  timeListHandle: function () {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
+    // console.log("timeListHandle")
+    let timelist = this.data.timelist
+    // 当前时间，只保留小时
+    let now = new Date().toTimeString().substring(0, 2)
+    for (let i = 0; i < timelist.length; i++) {
+      // 定义已定人数属性
+      timelist[i].res_number = 0
+      // 定义状态属性
+      let t = timelist[i].time.substring(0, 2)
+      if (now - t >= 0 && this.data.dateIsActive == 0) {
+        timelist[i].status = 2
+      } else {
+        timelist[i].status = 0
+      }
+      // 定义是否已经选择属性
+      timelist[i].timeIsSelect = 0
+    }
+    this.setData({
+      timelist: timelist
+    })
+    // setTimeout(function () {
+    //   wx.hideLoading()
+    // }
+    // ,1000)
+  },
 
+  // 已被预约时间列表处理函数
+  reservedTimeHandle: function () {
+    
+    // console.log("reservedTimeHandle")
+    let reservedTime = this.data.reservedTime
+    let timelist = this.data.timelist
+    let now = new Date().toTimeString().substring(0, 2)
+
+    // 更新前数据置空，保证数据干净
+    this.timeListHandle()
+
+    for (let i = 0; i < reservedTime.length; i++) {
+      let time = reservedTime[i].time
+      let res_num = reservedTime[i].res_number
+      // 更新时间列表已预定人数属性
+      for (let i = 0; i < time.length; i++) {
+        timelist.find(item => {
+          if (item.time == time[i]) {
+            item.res_number += res_num
+          }
+        })
+      }
+
+      // 判断是否满足人数要求，更新时间列表状态
+      for (let i = 0; i < timelist.length; i++) {
+
+        let t = timelist[i].time.substring(0, 2)
+        if (now - t >= 0 && this.data.dateIsActive == 0) {
+          timelist[i].status = 2
+        } else {
+          if (timelist[i].res_number + this.data.res_number > 4) {
+            timelist[i].status = 1
+          }
+        }
+
+      }
+
+    }
+    this.setData({
+      timelist: timelist
+    })
+    wx.hideLoading()
+    
+  },
 
   /**
    * 事件函数
@@ -455,24 +489,29 @@ Page({
     // this.getTimes();
     let itemId = e.currentTarget.dataset.id;
     let item = this.data.itemList[itemId];
-    console.log(item.name);
-    
+    console.log(item.table_name);
+    appData.itemIsActive = itemId
+    appData.item = item.table_name
+
     this.setData({
       itemIsActive: itemId,
-      item: item.name,
+      item: item.table_name,
       isTimeContinuous: false,
       selectedTimeList: [],
       userList: [],
       reservedUser: []
     })
     // console.log(this.data.item)
-    this.getTimes();
+    // this.getTimes();
+    this.getReservedTime()
     this.getReservedUser()
   },
 
   // 人数选择点击事件
   selectNum: function (e) {
-    this.getTimes()
+    // this.getTimes()
+    this.getReservedTime()
+    // this.reservedTimeHandle()
     let index = e.currentTarget.dataset.index;
     this.setData({
       numIsActive: index,
@@ -503,11 +542,6 @@ Page({
       thisDate: thisDate,
       userList: []
     })
-    // console.log(this.data.dateIsActive)
-    // this.getTimes()
-    // this.getReservedTime()
-    this.getReservedUser()
-    // console.log(this.data.reservedUser)
   },
 
   // 时间选择点击事件
@@ -593,7 +627,7 @@ Page({
     // 电话输入的正则判断
     let telephoneNum = this.data.telephoneNum
 
-    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
+    var myreg = /^(0|86|17951)?(13[0-9]|15[012356789]|16[6]|19[89]]|17[01345678]|18[0-9]|14[579])[0-9]{8}$/
     if (telephoneNum == 0 || telephoneNum < 11 || !myreg.test(telephoneNum)) {
       this.setData({
         telephoneNumIsWrong: true
@@ -615,6 +649,7 @@ Page({
 
   // 提交预约信息事件
   submit: function (e) {
+    let that = this
     let thisSelectedTimeList = this.data.selectedTimeList
     let selectedTimeList = []
     for (let i = 0; i < thisSelectedTimeList.length; i++) {
@@ -686,30 +721,38 @@ Page({
         icon: "error", // 图标，默认success
       })
     } else {
-      wx.showLoading({
-        title: '提交中...',
-        mask: true
-      })
+      // wx.showLoading({
+      //   title: '提交中...',
+      //   mask: true
+      // })
       // 添加预约记录
       userCollection.add({
         data: this.data.retData
       }).then(res => {
+        // wx.hideLoading()
         console.log('添加成功', res)
-        wx.hideLoading()
+
         wx.showToast({
           title: "预约成功！", // 提示的内容
           icon: "success", // 图标，默认success
+          duration: 2000,
+          success: function () {
+            setTimeout(function () {
+              that.getTimes()
+              that.setData({
+                playerName: '',
+                telephoneNum: '',
+                notes: '',
+                isTimeContinuous: false,
+                selectedTimeList: [],
+                userList: []
+              })
+              that.getReservedUser()
+            }, 1000)
+
+          }
         })
-        this.getTimes()
-        this.setData({
-          playerName: '',
-          telephoneNum: '',
-          notes: '',
-          isTimeContinuous: false,
-          selectedTimeList: [],
-          userList: []
-        })
-        this.getReservedUser()
+
       }).catch(err => {
         console.log('添加失败', err)//失败提示错误信息
       })
@@ -729,7 +772,12 @@ Page({
     this.getTimes()
     this.getAddress()
     this.getDate()
-    // console.log(this.data.userInfo, ",")
+
+    this.setData({
+      itemIsActive: appData.itemIsActive,
+      item: appData.item,
+      isLogin: appData.isLogin
+    })
   },
 
   /**
@@ -752,10 +800,11 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow() {
-    console.log("???")
+  onShow(option) {
     this.setData({
-      userInfo: appData.userInfo
+      itemIsActive: appData.itemIsActive,
+      item: appData.item,
+      isLogin: appData.isLogin
     })
   },
 
