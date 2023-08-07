@@ -239,6 +239,11 @@
   margin-bottom: 20rpx;
 
 }
+.userList{
+  /* display: block; */
+  text-overflow:ellipsis; 
+  word-wrap:break-word;
+}
 
 .nobody {
   font-size: x-small;

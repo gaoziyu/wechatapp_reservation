@@ -14,6 +14,7 @@ Page({
     isLogin: appData.isLogin,
     address: {},
     // isLogin: false,
+    timeFlag: false,
 
 
     // 选择项目相关数据
@@ -148,6 +149,7 @@ Page({
 
   // 获取已被预约时间
   getReservedTime: function () {
+    // console.log(";;;;;;;;;;;;;;;;;;;;;;;;", this.data.item)
     // wx.showLoading({
     //   title: '加载中...',
     //   mask: true
@@ -401,6 +403,33 @@ Page({
     console.log(this.data.thisDate)
   },
 
+  getFlagTime() {
+    let that = this
+    wx.cloud.callFunction({
+      name: "getFlagTime",
+      success(res) {
+        let flagTime = new Date( res.result.data[0].time)
+        let time = new Date()
+        // console.log("flagtime: ", flagTime)
+        // console.log("time: ", time)
+        if(flagTime - time > 0){
+          
+          // console.log("时候没到")
+        }else{
+          that.setData({
+            timeFlag: true
+          })
+          // console.log("时候到了")
+        }
+        that.setData({
+        })
+      },
+      fail(res) {
+        console.log("获取失败")
+      }
+    })
+  },
+
   /**
    * 数据处理函数 
    */
@@ -625,8 +654,8 @@ Page({
   // 输入联系方式事件，包含简单的正则判断
   telephoneNum: function (e) {
     // 电话输入的正则判断
-    let telephoneNum = this.data.telephoneNum
 
+    let telephoneNum = this.data.telephoneNum
     var myreg = /^(0|86|17951)?(13[0-9]|15[012356789]|16[6]|19[89]]|17[01345678]|18[0-9]|14[579])[0-9]{8}$/
     if (telephoneNum == 0 || telephoneNum < 11 || !myreg.test(telephoneNum)) {
       this.setData({
@@ -768,6 +797,7 @@ Page({
     /**
      * 初始化数据
      */
+    console.log("onload")
     this.getItems()
     this.getTimes()
     this.getAddress()
@@ -778,6 +808,10 @@ Page({
       item: appData.item,
       isLogin: appData.isLogin
     })
+    this.getReservedTime()
+    this.getReservedUser()
+
+    this.getFlagTime()
   },
 
   /**
@@ -801,11 +835,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow(option) {
+    
     this.setData({
       itemIsActive: appData.itemIsActive,
       item: appData.item,
-      isLogin: appData.isLogin
+      isLogin: appData.isLogin,
+      numIsActive: appData.numIsActive
     })
+    // console.log("xxx", appData.item, ",", this.data.item)
+    this.getFlagTime()
   },
 
   /**
