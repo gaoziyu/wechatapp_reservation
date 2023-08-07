@@ -52,6 +52,7 @@ Page({
     let item = e.currentTarget.dataset.table_name;
     appData.itemIsActive = itemIsActive
     appData.item = item
+    appData.numIsActive = -1
     console.log("appData.itemIsActive:", appData.itemIsActive)
     console.log("appData.item:", appData.item)
     if(appData.isLogin){
@@ -64,7 +65,9 @@ Page({
       });
     }
     
-  }
+  },
+
+ 
 })
 
 

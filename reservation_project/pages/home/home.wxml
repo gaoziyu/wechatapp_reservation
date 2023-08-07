@@ -18,12 +18,12 @@
   </view>
 
   <!-- 个人信息 -->
-  <view class="menuStyle" bindtap="info">
+  <!-- <view class="menuStyle" bindtap="info">
     <view class="line">
       个人信息
     </view>
     <van-icon name="arrow" class="line" />
-  </view>
+  </view> -->
 
   <!-- 关于 -->
   <view class="menuStyle" bindtap="about">
