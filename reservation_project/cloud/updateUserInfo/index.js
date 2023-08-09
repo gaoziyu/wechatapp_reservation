@@ -11,7 +11,9 @@ exports.main = async (event, context) => {
       openid: event.openid
     }).update({
       data: {
-        username: event.username
+        username: event.username,
+        tel: event.tel,
+        imgUrl: event.imgUrl,
       }
     })
   } catch (e) {

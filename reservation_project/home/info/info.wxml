@@ -1,30 +1,32 @@
 <!--pages/info/info.wxml-->
 
 
-<view class="menu">
-
+<view class="menu" wx:if="{{timeFlag}}">
+  <button class="head" open-type="chooseAvatar" bindchooseavatar="bindchooseavatar">
+      <image src="{{userInfo.imgUrl}}" class="avatarUrl" mode="widthFix"></image>
+  </button>
   <!-- 用户名 -->
   <van-row custom-class="menuStyle" align="center">
     <!--  -->
-    <!-- <van-col offset="1" span="7" custom-class="tag"><text decode="true">用&ensp;户&ensp;名：</text></van-col> -->
+    <van-col offset="1" span="7" custom-class="tag"><text decode="true">用&ensp;户&ensp;名：</text></van-col>
 
     <!-- 输入框与内容显示 -->
-    <!-- <van-col span="12" custom-class="tag">
-      <input wx:if="{{editUsernameStatus}}" placeholder="{{userInfo.username}}" class="username" type="text" bindinput="userNameInputAction"></input>
+    <van-col span="12" custom-class="tag">
+      <input wx:if="{{editUsernameStatus}}" placeholder="{{userInfo.username}}" class="username" type="nickname" bindinput="userNameInputAction"></input>
       <text wx:else style="font-size: small;">{{userInfo.username}}</text>
     </van-col>
 
     <van-col offset="1" span="3" custom-class="tag">
       <van-icon wx:if="{{editUsernameStatus}}" name="passed" size="50rpx" bindtap="submitUsernameIcon"/>
       <van-icon wx:else name="edit" size="50rpx" bindtap="editUsernameIcon"/>
-    </van-col> -->
+    </van-col>
     
   </van-row>
 
   <!-- 联系方式 -->
   <van-row custom-class="menuStyle">
 
-    <!-- <van-col offset="1" span="7" custom-class="tag">联系方式：</van-col>
+    <van-col offset="1" span="7" custom-class="tag">联系方式：</van-col>
 
     <van-col span="12" custom-class="tag">
       <input wx:if="{{editTelStatus}}" class="username" type="text" placeholder="{{userInfo.tel}}" bindinput="userTelInputAction"></input>
@@ -34,7 +36,7 @@
     <van-col offset="1" span="3" custom-class="tag">
       <van-icon wx:if="{{editTelStatus}}" name="passed" size="50rpx" bindtap="submitTelIcon"/>
       <van-icon wx:else name="edit" size="50rpx" bindtap="editTelIcon"/>
-    </van-col> -->
+    </van-col>
 
   </van-row>
 

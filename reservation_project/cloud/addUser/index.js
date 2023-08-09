@@ -14,7 +14,8 @@ exports.main = async (event, context) => {
       data: {
         openid: event.openid,
         username: event.username,
-        tel: event.tel
+        tel: event.tel,
+        imgUrl: event.imgUrl
       },
     });
     return {

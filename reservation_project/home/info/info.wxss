@@ -4,7 +4,7 @@ body{
   margin: 0rpx
 }
 .menu{
-  margin-top: 20%;
+  margin-top: 10%;
 }
 
 .menuStyle{
@@ -14,6 +14,23 @@ body{
   box-shadow: 1rpx 1rpx 5rpx 3rpx #a1a1a1;
   /* height: 150rpx; */
   
+}
+
+.head{
+  width: 200rpx;
+  height:200rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 0rpx;
+  margin-bottom: 10%;
+  /* background-color: black; */
+}
+
+.avatarUrl{
+  width: 200rpx;
+  height:200rpx;
+  border-radius: 50%;
+  /* margin-top: 25%; */
 }
 
 .tag{
