@@ -55,15 +55,18 @@ Page({
     appData.numIsActive = -1
     console.log("appData.itemIsActive:", appData.itemIsActive)
     console.log("appData.item:", appData.item)
-    if(appData.isLogin){
-      wx.switchTab({
-        url: '/pages/reservation/reservation'
-      });
-    }else{
-      wx.switchTab({
-        url: '/pages/home/home'
-      });
-    }
+    wx.switchTab({
+      url: '/pages/reservation/reservation'
+    });
+    // if(appData.isLogin){
+    //   wx.switchTab({
+    //     url: '/pages/reservation/reservation'
+    //   });
+    // }else{
+    //   wx.switchTab({
+    //     url: '/pages/home/home'
+    //   });
+    // }
     
   },
 

@@ -9,30 +9,21 @@ Page({
   data: {
     // 全局变量，用户登录信息
     userInfo: appData.userInfo,
-    openid: appData.openid,
 
     // 是否登录
-    isLogin: appData.isLogin,
+    isLogin: true,
 
-    test: 'test',
+    avatarUrl:"../../img/blank-profile.png",
   },
 
-  test: function () {
-    // wx.cloud.callFunction({
-    //   name: "getMyRes",
-    //   success(res) {
-    //     console.log("成功", res.result.data)
-    //   },
-    //   fail(res) {
-    //     console.log("失败", res);
-    //   }
-    // })
+  bindchooseavatar: function (e) {
+    console.log("avatarUrl:",e.detail.avatarUrl)
     this.setData({
-      openid: appData.openid
+      avatarUrl: e.detail.avatarUrl
     })
-    console.log("openid:", this.data.openid)
   },
 
+  // 跳转 -> 我的预约
   myRes: function () {
     console.log("toMyRes")
     wx.navigateTo({
@@ -46,6 +37,7 @@ Page({
     })
   },
 
+  // 跳转 -> 个人信息
   info: function () {
     console.log("toinfo")
     wx.navigateTo({
@@ -59,6 +51,7 @@ Page({
     })
   },
 
+  // 跳转 -> 关于我们
   about: function () {
     console.log("toabout")
     wx.navigateTo({
@@ -72,80 +65,9 @@ Page({
     })
   },
 
-  login: function () {
-    console.log("登录")
-    let that = this
-    wx.cloud.callFunction({
-      name: "getUser",
-      data: {
-        openid: appData.openid
-      },
-      success(res) {
-        // console.log("查询用户成功", res.result.data[0].username)
-        let data = res.result.data
-        if (res.result.data.length != 0) {
-          if (that.data.isLogin) {
-            return
-          }
-          appData.userInfo = {
-            username: data[0].username,
-            tel: data[0].tel
-          }
-          appData.isLogin = !appData.isLogin
-          that.setData({
-            userInfo: appData.userInfo,
-            isLogin: appData.isLogin
-          })
-        }
-        else {
-          console.log("未找到用户")
-          wx.cloud.callFunction({
-            name: "addUser",
-            data: {
-              openid: appData.openid,
-              username: '匿名用户',
-              tel: ''
-            },
-            success: function (res) {
-              console.log(res.result)
-              appData.userInfo = {
-                username: "nimingyonghu"
-              }
-              appData.isLogin = !appData.isLogin
-              that.setData({
-                userInfo: appData.userInfo,
-                isLogin: appData.isLogin
-              })
-            },
-            fail: console.error
-          })
-        }
-      },
-      fail(res) {
-        console.log("失败", res);
-      }
-    })
 
 
 
-
-
-  },
-
-  logout: function () {
-    console.log("退出登录")
-    if (!this.data.isLogin) {
-      return
-    }
-    appData.userInfo = {
-      username: "点击登录"
-    }
-    appData.isLogin = !appData.isLogin
-    this.setData({
-      userInfo: appData.userInfo,
-      isLogin: appData.isLogin
-    })
-  },
 
   /**
    * 生命周期函数--监听页面加载

@@ -12,6 +12,15 @@
   height:200rpx;
   border-radius: 50%;
   overflow: hidden;
+  padding: 0rpx;
+  /* background-color: black; */
+}
+
+.avatarUrl{
+  width: 200rpx;
+  height:200rpx;
+  border-radius: 50%;
+  /* margin-top: 25%; */
 }
 
 .menu{

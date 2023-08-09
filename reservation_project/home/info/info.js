@@ -10,43 +10,64 @@ Page({
    */
   data: {
     // 获取用户信息
-    userInfo: {},
+    userInfo: appData.userInfo,
+
+    timeFlag: false,
+
+    fileID: '',
 
     editUsernameStatus: false,
     editTelStatus: false,
-
   },
 
   /**
    * 请求数据
    */
   // 请求用户信息
-  getUserInfo: function () {
-    let that = this
-    wx.cloud.callFunction({
-      name: "getUser",
-      data: {
-        openid: appData.openid
-      },
-      success(res) {
-        // console.log("查询用户成功", res.result.data)
-        let userinfo = res.result.data[0]
-        if (userinfo.tel == '') {
-          userinfo.tel = "空"
-        }
-        that.setData({
-          userInfo: userinfo
-        })
-      },
-      fail(res) {
-        console.log("失败", res);
-      }
-    })
-  },
+
 
   /**
    * 事件函数
    */
+
+  // 点击更换头像
+  bindchooseavatar: function (e) {
+    console.log("avatarUrl:", e.detail.avatarUrl)
+    const that = this
+    wx.cloud.uploadFile({
+      cloudPath: 'avatarImg/' + that.data.userInfo.openid + '.png',
+      filePath: e.detail.avatarUrl, // 文件路径
+      success: res => {
+        console.log("保存头像成功: ",res.fileID)
+        that.data.userInfo.imgUrl = res.fileID
+        that.updateAvatarImg()
+      },
+      fail: err => {
+        // handle error
+      }
+    })
+
+
+  },
+
+  // 更新头像
+  updateAvatarImg: function () {
+    const that = this
+    wx.cloud.callFunction({
+      name: 'updateUserInfo',
+      data: {
+        openid: this.data.userInfo.openid,
+        imgUrl: this.data.userInfo.imgUrl
+      },
+      success: function (res) {
+        console.log("更新头像成功", res)
+        appData.userInfo = that.data.userInfo
+      },
+      fail: function (res) {
+        console.log("更新头像失败", res)
+      }
+    })
+  },
 
   // 点击用户名编辑按钮
   editUsernameIcon: function () {
@@ -61,17 +82,18 @@ Page({
     this.setData({
       editUsernameStatus: !this.data.editUsernameStatus
     })
-    console.log("appData.openid:", appData.openid)
+    console.log("userInfo.username:", this.data.userInfo.username)
     let that = this
     wx.cloud.callFunction({
-      name: 'updateUsername',
+      name: 'updateUserInfo',
       data: {
-        openid: appData.openid,
+        openid: this.data.userInfo.openid,
         username: this.data.userInfo.username
       },
       success: function (res) {
         console.log("更新用户名成功", res)
         appData.userInfo = that.data.userInfo
+
         // console.log(" appData.userInfo :", appData.userInfo )
       },
       fail: function (res) {
@@ -99,20 +121,19 @@ Page({
   // 点击联系方式提交按钮
   submitTelIcon: function () {
     console.log("submitTelIcon")
+    const that = this
     this.setData({
       editTelStatus: !this.data.editTelStatus
     })
-
-    console.log("appData.openid:", appData.openid)
-
     wx.cloud.callFunction({
-      name: 'updateUserTel',
+      name: 'updateUserInfo',
       data: {
-        openid: appData.openid,
+        openid: this.data.userInfo.openid,
         tel: this.data.userInfo.tel
       },
       success: function (res) {
         console.log("更新联系方式成功", res)
+        appData.userInfo = that.data.userInfo
       },
       fail: function (res) {
         console.log("更新联系方式失败", res)
@@ -128,12 +149,38 @@ Page({
       userInfo: userinfo
     })
   },
+  getFlagTime() {
+    let that = this
+    wx.cloud.callFunction({
+      name: "getFlagTime",
+      success(res) {
+        let flagTime = new Date( res.result.data[0].time)
+        let time = new Date()
+        // console.log("flagtime: ", flagTime)
+        // console.log("time: ", time)
+        if(flagTime - time > 0){
+          
+          // console.log("时候没到")
+        }else{
+          that.setData({
+            timeFlag: true
+          })
+          // console.log("时候到了")
+        }
+        that.setData({
+        })
+      },
+      fail(res) {
+        console.log("获取失败")
+      }
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.getUserInfo()
+    this.getFlagTime() 
   },
 
   /**
@@ -147,7 +194,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      userInfo: appData.userInfo
+    })
+    this.getFlagTime() 
   },
 
   /**

@@ -3,15 +3,15 @@
 const db = wx.cloud.database()
 const userCollection = db.collection('reservation')
 const appData = getApp().globalData
-
 Page({
 
   /**
    * 页面的初始数据
    */
+  
   data: {
     userInfo: appData.userInfo,
-    isLogin: appData.isLogin,
+    isLogin: true,
     address: {},
     // isLogin: false,
     timeFlag: false,
@@ -655,7 +655,7 @@ Page({
   telephoneNum: function (e) {
     // 电话输入的正则判断
 
-    let telephoneNum = this.data.telephoneNum
+    let telephoneNum = this.data.userInfo != '' ? this.data.userInfo : this.data.telephoneNum
     var myreg = /^(0|86|17951)?(13[0-9]|15[012356789]|16[6]|19[89]]|17[01345678]|18[0-9]|14[579])[0-9]{8}$/
     if (telephoneNum == 0 || telephoneNum < 11 || !myreg.test(telephoneNum)) {
       this.setData({
@@ -839,8 +839,8 @@ Page({
     this.setData({
       itemIsActive: appData.itemIsActive,
       item: appData.item,
-      isLogin: appData.isLogin,
-      numIsActive: appData.numIsActive
+      numIsActive: appData.numIsActive,
+      userInfo: appData.userInfo
     })
     // console.log("xxx", appData.item, ",", this.data.item)
     this.getFlagTime()
